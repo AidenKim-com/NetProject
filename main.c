@@ -3,12 +3,25 @@
 
 #define MAC_ADDR_LEN 6
 
+
+
 struct ethernet_hdr
 {
     uint8_t  ether_dhost[MAC_ADDR_LEN];   /* destination ethernet address */
     uint8_t  ether_shost[MAC_ADDR_LEN];   /* source ethernet address */
     uint16_t ether_type;                    /* protocol */
 };
+
+/*
+    Radiotap Header
+*/
+struct radiotap_hdr
+{
+    u_char hdr_rev;     // Header revision
+    u_char hdr_pad;     // Header Header pad
+    u_short hdr_len;    // Header length
+}
+
 
 /*
     802.11 Authentication Header
@@ -24,12 +37,24 @@ struct wlan_auth_hdr
     
 };
 
+/*
+    802.11 Authentication Body
+*/
 struct wlan_auth_body
 {
     u_short auth_algorithm_num;         // Authentication Algorithm Number
     u_short auth_seq;                   // Authentication Transaction Sequence
     u_short status_code;                // Status Code
     // Variable Challenge Text
+};
+
+/*
+    802.11 Authentication Frame
+*/
+struct wlan_auth_frame
+{
+    struct wlan_auth_hdr auth_hdr;
+    struct wlan_auth_body auth_body;
 };
 
 
