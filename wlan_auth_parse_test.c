@@ -2,6 +2,53 @@
 #include <stdbool.h>
 #include <stdio.h>
 
+#define MAC_ADDR_LEN 6
+
+/*
+    Radiotap Header
+*/
+struct radiotap_hdr
+{
+    u_char hdr_rev;     // Header revision
+    u_char hdr_pad;     // Header Header pad
+    u_short hdr_len;    // Header length
+};
+
+/*
+    802.11 Authentication Header
+*/
+struct wlan_auth_hdr
+{
+    u_short frame_control;              // Frame Control
+    u_short duration_ID;                // Duration ID
+    uint8_t mac_dhost[MAC_ADDR_LEN];    // Destination MAC Addr
+    uint8_t mac_shost[MAC_ADDR_LEN];    // Source MAC Addr
+    uint8_t bss_id[MAC_ADDR_LEN];       // BSS ID MAC Addr
+    u_short sequence_control;           // Sequence Control 
+    
+};
+
+/*
+    802.11 Authentication Body
+*/
+struct wlan_auth_body
+{
+    u_short auth_algorithm_num;         // Authentication Algorithm Number
+    u_short auth_seq;                   // Authentication Transaction Sequence
+    u_short status_code;                // Status Code
+    // Variable Challenge Text
+};
+
+/*
+    802.11 Authentication Frame
+*/
+struct wlan_auth_frame
+{
+    struct wlan_auth_hdr auth_hdr;
+    struct wlan_auth_body auth_body;
+};
+
+
 void usage() {
 	printf("syntax: pcap-test <interface>\n");
 	printf("sample: pcap-test wlan0\n");
@@ -45,6 +92,23 @@ int main(int argc, char* argv[]) {
 			break;
 		}
 		printf("%u bytes captured\n", header->caplen);
+
+        printf("Parsing....");
+
+        const struct radiotap_hdr *frame;
+        const struct wlan_auth_frame *wlan_frame;
+        
+        frame = (struct radiotap_hdr*)(packet);
+        printf("Radiotap Header Length : 0x%x\n", frame->hdr_len);
+
+        wlan_frame = (struct wlan_auth_frame*)(packet+frame->hdr_len);
+        printf("Frame Control : 0x%x\n", wlan_frame->auth_hdr.frame_control);
+        printf("Duration ID : 0x%x\n", wlan_frame->auth_hdr.duration_ID);
+        printf("Sequence Control : 0x%x\n", wlan_frame->auth_hdr.sequence_control);
+
+        printf("Auth Algorithm : 0x%x\n", wlan_frame->auth_body.auth_algorithm_num);
+        printf("Auth SEQ : 0x%x\n", wlan_frame->auth_body.auth_seq);
+        printf("Status Code : 0x%x\n", wlan_frame->auth_body.status_code);
 	}
 
 	pcap_close(pcap);

@@ -3,8 +3,6 @@
 
 #define MAC_ADDR_LEN 6
 
-
-
 struct ethernet_hdr
 {
     uint8_t  ether_dhost[MAC_ADDR_LEN];   /* destination ethernet address */
