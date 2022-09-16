@@ -1,14 +1,37 @@
 #include <pcap.h>
 #include <stdio.h>
 
-#define ETHR_ADDR_LEN 6
+#define MAC_ADDR_LEN 6
 
 struct ethernet_hdr
 {
-    uint8_t  ether_dhost[ETHER_ADDR_LEN];   /* destination ethernet address */
-    uint8_t  ether_shost[ETHER_ADDR_LEN];   /* source ethernet address */
+    uint8_t  ether_dhost[MAC_ADDR_LEN];   /* destination ethernet address */
+    uint8_t  ether_shost[MAC_ADDR_LEN];   /* source ethernet address */
     uint16_t ether_type;                    /* protocol */
 };
+
+/*
+    802.11 Authentication Header
+*/
+struct wlan_auth_hdr
+{
+    u_short frame_control;              // Frame Control
+    u_short duration_ID;                // Duration ID
+    uint8_t mac_dhost[MAC_ADDR_LEN];    // Destination MAC Addr
+    uint8_t mac_shost[MAC_ADDR_LEN];    // Source MAC Addr
+    uint8_t bss_id[MAC_ADDR_LEN];       // BSS ID MAC Addr
+    u_short sequence_control;           // Sequence Control 
+    
+};
+
+struct wlan_auth_body
+{
+    u_short auth_algorithm_num;         // Authentication Algorithm Number
+    u_short auth_seq;                   // Authentication Transaction Sequence
+    u_short status_code;                // Status Code
+    // Variable Challenge Text
+};
+
 
 typedef struct
 {
