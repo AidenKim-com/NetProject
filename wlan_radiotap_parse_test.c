@@ -18,7 +18,7 @@ struct radiotap_hdr
     u_char flags;           // Flags
     u_char data_rate;       // Data Rate
     u_short channel_freq;    // Channel Frequency
-    u_short channel_flgas;   // Channel Flags
+    u_short channel_flags;   // Channel Flags
     u_short ant_signal;      // Antenna signal
     u_short signal_qual;     // Signal Quality
     u_short rx_flags;        // RX flags
@@ -114,14 +114,7 @@ int main(int argc, char* argv[]) {
         frame = (struct radiotap_hdr*)(packet);
         printf("Radiotap Header Length : 0x%x\n", frame->hdr_len);
 
-        wlan_frame = (struct wlan_auth_frame*)(packet+frame->hdr_len);
-        printf("Frame Control : 0x%x\n", wlan_frame->auth_hdr.frame_control);
-        printf("Duration ID : 0x%x\n", wlan_frame->auth_hdr.duration_ID);
-        printf("Sequence Control : 0x%x\n", wlan_frame->auth_hdr.sequence_control);
-
-        printf("Auth Algorithm : 0x%x\n", wlan_frame->auth_body.auth_algorithm_num);
-        printf("Auth SEQ : 0x%x\n", wlan_frame->auth_body.auth_seq);
-        printf("Status Code : 0x%x\n", wlan_frame->auth_body.status_code);
+        printf("hdr_rev : 0x%x\n", frame->hdr_rev);
 	}
 
 	pcap_close(pcap);
