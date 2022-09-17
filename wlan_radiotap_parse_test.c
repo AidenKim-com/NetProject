@@ -115,6 +115,13 @@ int main(int argc, char* argv[]) {
         printf("Radiotap Header Length : 0x%x\n", frame->hdr_len);
 
         printf("hdr_rev : 0x%x\n", frame->hdr_rev);
+        printf("hdr_pad : 0x%x\n", frame->hdr_pad);
+        printf("hdr_len : 0x%x\n", frame->hdr_len);
+        printf("present_flag1 : 0x%x\n", frame->present_flag1);
+        printf("present_flag2 : 0x%x\n", frame->present_flag2);
+        printf("present_flag3 : 0x%x\n", frame->present_flag3);
+        printf("flags : 0x%x\n", frame->flags);
+        printf("data_rate : 0x%x\n", frame->data_rate);
 	}
 
 	pcap_close(pcap);
